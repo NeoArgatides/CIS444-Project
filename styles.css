@@ -34,3 +34,37 @@ nav a {
 nav a:hover {
     text-decoration: underline;
 }
+
+.post {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.post h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.post-meta {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.post-excerpt {
+    color: #444;
+    line-height: 1.5;
+}
+
+.read-more {
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
