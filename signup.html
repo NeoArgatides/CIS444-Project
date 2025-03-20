@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Forum</title>
+    <link rel="stylesheet" href="signup.css">
+    <style>
+        input.invalid {
+            border-color: red;
+        }
+    </style>
+</head>
+<body>
+    <form id="signup-form">
+        <input type="text" id="username" placeholder="Username" required>
+        <p id="username-error" style="color: red; display: none;">Username cannot contain spaces. Use underscores instead.</p>
+        
+        <input type="password" id="password" placeholder="Password" required>
+        
+        <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+        <p id="error-message" style="color: red; display: none;">Passwords do not match!</p>
+        
+        <button type="submit">Sign Up</button>
+        <button type="button" id="reset-button">Reset</button>
+        <p id="password-length-error" style="color: red; display: none;">Password must be at least 8 characters long.</p>
+    </form>
+    <script src="signup.js"></script>
+</body>
+</html>
