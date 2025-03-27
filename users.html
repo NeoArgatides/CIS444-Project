@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search users page</title>
+    <link rel="stylesheet" href="./assets/css/users.css" />
+  </head>
+  <body>
+    <header>
+      <a href="index.html">
+        <img src="./assets/img/image-removebg-preview.png" alt="logo" />
+      </a>
+      <input type="text" name="search" placeholder="Search users" />
+      <div class="profile">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
+          alt="profile"
+        />
+        <span>John Doe</span>
+      </div>
+    </header>
+    <main>
+      <div class="sidebar">
+        <ul>
+          <li>
+            <a href="index.html">
+              <img
+                src="https://img.icons8.com/?size=100&id=67881&format=png&color=000000"
+                alt="home"
+              />
+              <span>Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="users.html">
+              <img
+                src="https://img.icons8.com/?size=100&id=98957&format=png&color=000000"
+                alt="users"
+              />
+              <span>Users</span>
+            </a>
+          </li>
+          <li>
+            <a href="settings.html">
+              <img
+                src="https://img.icons8.com/?size=100&id=59854&format=png&color=000000"
+                alt="settings"
+              />
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+        <div class="links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">User agreement</a>
+        </div>
+      </div>
+      <div class="page">
+        <div class="page-header">
+          <h1>Users</h1>
+          <div class="filters">
+            <div class="search-box">
+              <img
+                src="https://img.icons8.com/?size=100&id=132&format=png"
+                alt="search"
+              />
+              <input type="text" placeholder="Filter by user" />
+            </div>
+            <div class="tabs">
+              <button class="active">New users</button>
+              <button>Editors</button>
+              <button>Reputation</button>
+            </div>
+          </div>
+        </div>
+        <div class="users-grid">
+          <!-- User cards will be populated by JavaScript -->
+        </div>
+        <div class="pagination">
+          <a class="active">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">4</a>
+          <a href="#">5</a>
+          <span>...</span>
+          <a href="#">775187</a>
+          <a href="#">Next</a>
+        </div>
+      </div>
+    </main>
+    <script type="module" src="./assets/js/users.js"></script>
+  </body>
+</html>
