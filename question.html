@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Question Detail</title>
+    <link rel="stylesheet" href="./assets/css/question.css" />
+  </head>
+  <body>
+    <header>
+      <a href="index.html">
+        <img src="./assets/img/image-removebg-preview.png" alt="logo" />
+      </a>
+      <input type="text" name="search" placeholder="Search questions" />
+      <div class="profile">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
+          alt="profile"
+        />
+        <span>John Doe</span>
+      </div>
+    </header>
+    <main>
+      <div class="sidebar">
+        <ul>
+          <li>
+            <a href="index.html">
+              <img
+                src="https://img.icons8.com/?size=100&id=67881&format=png&color=000000"
+                alt="home"
+              />
+              <span>Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="users.html">
+              <img
+                src="https://img.icons8.com/?size=100&id=98957&format=png&color=000000"
+                alt="users"
+              />
+              <span>Users</span>
+            </a>
+          </li>
+          <li>
+            <a href="questionanswer.html">
+              <img
+                src="https://img.icons8.com/?size=100&id=2908&format=png&color=000000"
+                alt="q&a"
+              />
+              <span>Q&A</span>
+            </a>
+          </li>
+        </ul>
+        <div class="links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">User agreement</a>
+        </div>
+      </div>
+      <div class="main-content">
+        <div class="content">
+          <div class="question-header">
+            <h1>Angular 18 live reload routing issues</h1>
+            <div class="question-stats">
+              <span>Asked today</span>
+              <span>Modified today</span>
+              <span>Viewed 6 times</span>
+            </div>
+            <button class="ask-button">Ask Question</button>
+          </div>
+
+          <div class="post-layout">
+            <div class="vote-cell">
+              <button class="vote-button up" aria-label="Up vote">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M12 2l-5.5 9h11L12 2zm0 20l5.5-9h-11L12 22z" />
+                </svg>
+              </button>
+              <span class="vote-count">0</span>
+              <button class="vote-button down" aria-label="Down vote">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M12 2l-5.5 9h11L12 2zm0 20l5.5-9h-11L12 22z" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="post-content">
+              <div class="post-body">
+                <p>
+                  Somehow, the <code>live reload</code> (when any code is
+                  changed) causes routing issues. I've spent couple of hours
+                  investigating this, however couldn't understand at all what is
+                  going on. Here is what happens:
+                </p>
+
+                <blockquote>
+                  <p>
+                    when I navigate through the app -> routing works perfect.
+                    There is no issue at all
+                  </p>
+                </blockquote>
+
+                <blockquote>
+                  <p>
+                    when I paste a Url with segements or the root one into the
+                    browser - it works as expected, all is good.
+                  </p>
+                </blockquote>
+
+                <blockquote>
+                  <p>
+                    when I change any code, the
+                    <strong>live reload feature does something weird</strong>,
+                    it inserts the correct content into the outlet (according to
+                    the current Url), however the Url path shows root / (or it
+                    is taken to the root). When I click any link in the app - it
+                    throws the following error:
+                  </p>
+                </blockquote>
+
+                <pre><code>Cannot activate an already activated outlet</code></pre>
+
+                <p>
+                  after spending several hours trying to understand this weird
+                  behavior I couldn't move on at all.
+                </p>
+
+                <p>Angular vertion is 18</p>
+
+                <p>
+                  There is MSAL for Angular library used that handles the login
+                  and authentication, though I don't think it has something to
+                  do with this issue, because like I've mentioned above, when I
+                  paste any Url with segments into the browser - it takes me to
+                  the correct destination without any issue and the app works
+                  fine. The problem only occurs during the live reload.
+                </p>
+
+                <div class="post-tags">
+                  <a href="#" class="tag">angular</a>
+                  <a href="#" class="tag">angular-routing</a>
+                  <a href="#" class="tag">angular18</a>
+                </div>
+              </div>
+
+              <div class="post-footer">
+                <div class="post-actions">
+                  <button>Share</button>
+                  <button>Edit</button>
+                  <button>Follow</button>
+                </div>
+                <div class="post-author">
+                  <div class="author-info">
+                    <span class="asked">asked today</span>
+                    <div class="user-card">
+                      <img
+                        src="https://www.gravatar.com/avatar/123"
+                        alt="author avatar"
+                      />
+                      <a href="#" class="username">Semen Shekhovtsov</a>
+                      <span class="reputation">882</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="your-answer">
+            <h2>Your Answer</h2>
+            <div class="editor-toolbar">
+              <button title="Bold"><strong>B</strong></button>
+              <button title="Italic"><em>I</em></button>
+              <button title="Link"><span>🔗</span></button>
+              <button title="Quote"><span>"</span></button>
+              <button title="Code"><span>{}</span></button>
+              <button title="Image"><span>📷</span></button>
+              <button title="Snippet"><span>⌨️</span></button>
+              <div class="separator"></div>
+              <button title="Numbered list"><span>1.</span></button>
+              <button title="Bulleted list"><span>•</span></button>
+              <div class="separator"></div>
+              <button title="Undo"><span>↩</span></button>
+              <button title="Redo"><span>↪</span></button>
+              <button title="Help" class="help"><span>?</span></button>
+            </div>
+            <textarea placeholder="Write your answer here..."></textarea>
+            <button class="post-answer">Post Your Answer</button>
+          </div>
+        </div>
+
+        <aside class="side-widgets">
+          <!-- Same widgets as before -->
+        </aside>
+      </div>
+    </main>
+    <script type="module" src="./assets/js/question.js"></script>
+  </body>
+</html>
