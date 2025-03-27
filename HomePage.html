@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DevSphere Home</title>
+  <link rel="stylesheet" href="HomePage.css" />
+  <link rel="stylesheet" href="login.css" />
+  <link rel="stylesheet" href="signup.css" />
+</head>
+<body>
+  <!-- Header (no nav links as requested) -->
+  <header class="site-header">
+    <div class="header-left">
+      <h1 class="logo">DevSphere</h1>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <div class="main-container">
+    <!-- Center/Main Section -->
+    <div class="center-section">
+      
+      <!-- Welcome Banner -->
+      <div class="welcome-banner">
+        <img src="imgs/waving-hand.png" alt="Wave icon" class="wave-icon" />
+        <div class="welcome-text">
+          <h2>Welcome to DevSphere, Group 3</h2>
+          <p>
+            Have an account? 
+            <a href="#" id="login-link">Log In</a> or 
+            <a href="#" id="signup-link">Sign Up</a>
+          </p>
+        </div>
+      </div>
+      <!-- Welcome Banner END -->
+
+      <div class="posts-header">
+        <h2>Recent Discussions</h2>
+        <button id="create-post-btn">Create New Post</button>
+      </div>
+      <!-- Placeholder for dynamic discussions -->
+      <div id="posts-container">
+        <p>Placeholder for recent discussions...</p>
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <aside class="right-sidebar">
+      <!-- Posts for You -->
+      <div class="sidebar-block">
+        <h3>Posts for you</h3>
+        <ul class="placeholder-list">
+          <li><a href="#">How to optimize Python code for speed</a></li>
+          <li><a href="#">Best practices for React state management</a></li>
+          <li><a href="#">Tips for configuring Docker containers</a></li>
+          <li><a href="#">Understanding async/await in JavaScript</a></li>
+        </ul>
+      </div>
+
+      <!-- Latest Blog -->
+      <div class="sidebar-block">
+        <h3>Latest Blog</h3>
+        <p>
+          Placeholder text for the latest blog post(s). 
+        </p>
+      </div>
+
+      <!-- Watched Tags -->
+      <div class="sidebar-block">
+        <h3>Watched Tags</h3>
+        <div class="tag-list">
+          <span class="tag">Google Cloud</span>
+          <span class="tag">Git</span>
+          <span class="tag">Microsoft Azure</span>
+          <span class="tag">AWS</span>
+        </div>
+      </div>
+
+      <!-- Collectives -->
+      <div class="sidebar-block">
+        <h3>Collectives</h3>
+        <ul class="collectives-list">
+          <li>
+            Google Cloud 
+            <span class="members-count">5.2k members</span>
+            <button class="join-btn">Join</button>
+          </li>
+          <li>
+            Microsoft Azure
+            <span class="members-count">3.8k members</span>
+            <button class="join-btn">Join</button>
+          </li>
+          <li>
+            AWS 
+            <span class="members-count">4.1k members</span>
+            <button class="join-btn">Join</button>
+          </li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Join DevSphere Section -->
+  <section class="join-section">
+    <h2>Join DevSphere</h2>
+    <div class="join-cards">
+      <div class="join-card">
+        <h3>Cloud Solutions</h3>
+        <p>Discover best practices for cloud-based development.</p>
+        <button>Learn More</button>
+      </div>
+      <div class="join-card">
+        <h3>DevOps Tools</h3>
+        <p>Streamline your CI/CD pipeline with modern tools.</p>
+        <button>Learn More</button>
+      </div>
+      <div class="join-card">
+        <h3>Community Support</h3>
+        <p>Ask questions, share insights, and connect with peers.</p>
+        <button>Learn More</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2025 DevSphere. All rights reserved.</p>
+  </footer>
+
+  <!-- ===== MODAL OVERLAY & POPUP MODALS ===== -->
+
+  <!-- Overlay that grays out the background -->
+  <div id="modal-overlay" class="modal-overlay hidden"></div>
+
+  <!-- Log In Modal -->
+  <div id="login-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="close-modal-btn" id="close-login-btn">X</button>
+      <h2>
+        Log in to<img src="imgs/logo.png" alt="DevSphere logo" class="modal-login-logo-inline" />
+    </h2>
+      <p>By logging in, you agree to our Terms and Privacy Policy.</p>
+      <button class="social-btn google-btn">Log in with Google</button>
+      <button class="social-btn github-btn">Log in with GitHub</button>
+      <div class="divider">OR</div>
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" placeholder="Enter your email">
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" placeholder="Enter your password">
+      <button class="primary-btn">Log In</button>
+      <p class="already-member">
+        Don't have an account? <a href="#" id="switch-to-signup">Sign Up</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Sign Up Modal -->
+  <div id="signup-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="close-modal-btn" id="close-signup-btn">X</button>
+      <h2>
+        Join 
+        <img src="imgs/logo.png" alt="DevSphere logo" class="modal-join-logo-inline" />
+    </h2>
+      <p>By clicking "Sign Up", you agree to our Terms and Privacy Policy.</p>
+      <button class="social-btn google-btn">Sign up with Google</button>
+      <button class="social-btn github-btn">Sign up with GitHub</button>
+      <div class="divider">OR</div>
+      <label for="signup-email">Email</label>
+      <input type="email" id="signup-email" placeholder="Enter your email">
+      <label for="signup-password">Password</label>
+      <input type="password" id="signup-password" placeholder="Create a password">
+      <button class="primary-btn">Sign Up</button>
+      <p class="already-member">
+        Already have an account? <a href="#" id="switch-to-login">Log In</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="HomePage.js"></script>
+</body>
+</html>
