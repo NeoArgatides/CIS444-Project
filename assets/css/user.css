@@ -1,5 +1,4 @@
-/* Import the common header and sidebar styles from users.css */
-@import "users.css";
+@import "main.css";
 
 .user-profile {
   padding: 30px;

@@ -1,0 +1,276 @@
+/* Import common styles */
+@import "main.css";
+
+.main-content {
+  min-width: 0;
+  display: flex;
+  flex-grow: 1;
+  padding: 24px;
+  gap: 24px;
+}
+
+.content {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.question-header {
+  position: relative;
+  border-bottom: 1px solid #e3e6e8;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.question-header h1 {
+  font-size: 27px;
+  margin: 0 0 8px 0;
+  color: #242729;
+}
+
+.question-stats {
+  display: flex;
+  gap: 16px;
+  color: #6a737c;
+  font-size: 13px;
+}
+
+.ask-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: #0a95ff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.post-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+}
+
+.vote-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.vote-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.vote-button svg {
+  fill: #babfc4;
+  width: 36px;
+  height: 36px;
+}
+
+.vote-button:hover svg {
+  fill: #838c95;
+}
+
+.vote-button.up svg {
+  transform: rotate(180deg);
+}
+
+.vote-count {
+  font-size: 21px;
+  color: #3b4045;
+}
+
+.post-content {
+  min-width: 0;
+}
+
+.post-body {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #242729;
+}
+
+.post-body p {
+  margin: 0 0 1.1em;
+}
+
+.post-body code {
+  background-color: #f6f6f6;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.post-body pre {
+  background-color: #f6f6f6;
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.post-body blockquote {
+  border-left: 4px solid #e3e6e8;
+  margin: 0 0 1.1em;
+  padding: 0 16px;
+  color: #3b4045;
+}
+
+.post-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 24px 0;
+}
+
+.tag {
+  background-color: #e1ecf4;
+  color: #39739d;
+  padding: 4px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: 16px;
+  border-top: 1px solid #e3e6e8;
+}
+
+.post-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.post-actions button {
+  background: none;
+  border: none;
+  color: #6a737c;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.post-actions button:hover {
+  color: #3b4045;
+}
+
+.post-author {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+}
+
+.author-info {
+  background-color: #f8f9fa;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.asked {
+  color: #6a737c;
+  font-size: 12px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-card img {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+}
+
+.username {
+  color: #0074cc;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.reputation {
+  color: #6a737c;
+  font-size: 12px;
+}
+
+.your-answer {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e3e6e8;
+}
+
+.your-answer h2 {
+  font-size: 19px;
+  margin: 0 0 16px 0;
+}
+
+.editor-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border: 1px solid #e3e6e8;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+}
+
+.editor-toolbar button {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 3px;
+  color: #6a737c;
+}
+
+.editor-toolbar button:hover {
+  background-color: #e3e6e8;
+}
+
+.separator {
+  width: 1px;
+  background-color: #e3e6e8;
+  margin: 0 4px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 10px;
+  border: 1px solid #e3e6e8;
+  border-radius: 0 0 4px 4px;
+  font-family: inherit;
+  font-size: 15px;
+  resize: vertical;
+}
+
+.post-answer {
+  margin-top: 16px;
+  background-color: #0a95ff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.post-answer:hover {
+  background-color: #0074cc;
+}

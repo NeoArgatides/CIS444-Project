@@ -1,20 +1,8 @@
+import { setActive } from "./navigation.js";
 import { users } from "./UserList.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-  const currentPath = window.location.pathname;
-  const navLinks = document.querySelectorAll(".sidebar ul li a");
-
-  navLinks.forEach((link) => {
-    const linkPath = new URL(link.href, window.location.origin).pathname;
-    console.log("linkPath", linkPath);
-    console.log("currentPath", currentPath.split(".html")[0]);
-
-    if (currentPath === linkPath) {
-      link.classList.add("active");
-      link.parentElement.classList.add("active");
-    }
-  });
-
+  setActive();
   const usersGrid = document.querySelector(".users-grid");
   const searchInput = document.querySelector(".search-box input");
   const tabButtons = document.querySelectorAll(".tabs button");
