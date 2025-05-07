@@ -1,5 +1,5 @@
 export const setActive = () => {
-  const currentPath = window.location.pathname.split(".html")[0];
+  const currentPath = window.location.pathname.split(".php")[0];
   const navLinks = document.querySelectorAll(".sidebar ul li a");
 
   navLinks.forEach((link) => {

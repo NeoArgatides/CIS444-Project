@@ -1,7 +1,6 @@
 import { setActive } from "./navigation.js";
-import { users } from "./UserList.js";
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   setActive();
   const usersGrid = document.querySelector(".users-grid");
   const searchInput = document.querySelector(".search-box input");
@@ -9,12 +8,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let currentTab = "new-users";
   let currentSearchTerm = "";
+  let users = [];
 
-  // Function to sort and filter users based on current tab and search term
+  // Fetch users from PHP API
+  async function fetchUsers() {
+    try {
+      const response = await fetch("php/fetch_users.php");
+      const data = await response.json();
+
+      if (data.error) {
+        usersGrid.innerHTML = `<div class="error">${data.error}</div>`;
+        return;
+      }
+
+      // Transform the data to match expected structure (if needed)
+      users = data.map((user) => ({
+        id: user.UserID,
+        name: user.Username,
+        location: "Unknown", // or user.Location if exists
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          user.Username
+        )}&background=random`,
+        joinedDate: new Date(user.DateJoined),
+        isAdmin: user.Role === "Admin",
+        reputation: Math.floor(Math.random() * 1000),
+        posts: user.PostCount,
+      }));
+
+      renderUsers();
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      usersGrid.innerHTML = `<div class="error">Unable to load users.</div>`;
+    }
+  }
+
   function getFilteredUsers() {
     let filteredUsers = [...users];
 
-    // Apply search filter if there's a search term
     if (currentSearchTerm) {
       filteredUsers = filteredUsers.filter(
         (user) =>
@@ -23,20 +53,18 @@ document.addEventListener("DOMContentLoaded", function () {
       );
     }
 
-    // Apply tab-specific filtering and sorting
     switch (currentTab) {
-      case "new-users":
+      case "users":
         return filteredUsers.sort((a, b) => b.joinedDate - a.joinedDate);
-      case "editors":
-        return filteredUsers.filter((user) => user.isEditor);
-      case "reputation":
-        return filteredUsers.sort((a, b) => b.reputation - a.reputation);
+      case "admin":
+        return filteredUsers.filter((user) => user.isAdmin);
+      case "posts":
+        return filteredUsers.sort((a, b) => b.posts - a.posts);
       default:
         return filteredUsers;
     }
   }
 
-  // Function to render users
   function renderUsers() {
     const filteredUsers = getFilteredUsers();
     usersGrid.innerHTML = "";
@@ -52,21 +80,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     filteredUsers.forEach((user) => {
       const userCard = `
-        <a href="/user.html?name=${encodeURIComponent(
-          user.name
-        )}" class="user-card">
+        <a href="/user.php?id=${encodeURIComponent(user.id)}" class="user-card">
           <img src="${user.avatar}" alt="${user.name}" />
           <div class="user-info">
             <h3>${user.name}</h3>
             <div class="location">${user.location}</div>
             <div class="score">
-              ${
-                currentTab === "reputation"
-                  ? `Reputation: ${user.reputation}`
-                  : `Score: ${user.score}`
-              }
+              ${`Posts: ${user.posts}`}
             </div>
-            ${user.isEditor ? '<div class="editor-badge">Editor</div>' : ""}
+            ${user.isAdmin ? '<div class="editor-badge">Admin</div>' : ""}
           </div>
         </a>
       `;
@@ -77,12 +99,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Tab click handlers
   tabButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      // Remove active class from all buttons
       tabButtons.forEach((btn) => btn.classList.remove("active"));
-      // Add active class to clicked button
       button.classList.add("active");
 
-      // Update current tab
       currentTab = button.textContent.toLowerCase().replace(" ", "-");
       renderUsers();
     });
@@ -94,6 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
     renderUsers();
   });
 
-  // Initial render
-  renderUsers();
+  // Initial fetch + render
+  await fetchUsers();
 });

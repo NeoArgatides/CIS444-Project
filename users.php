@@ -15,13 +15,13 @@
             <a href="index.php">
               <img
                 src="https://img.icons8.com/?size=100&id=67881&format=png&color=000000"
-                alt="home"
+                alt="Ask"
               />
-              <span>Home</span>
+              <span>Ask</span>
             </a>
           </li>
           <li>
-            <a href="users.html">
+            <a href="users.php">
               <img
                 src="https://img.icons8.com/?size=100&id=98957&format=png&color=000000"
                 alt="users"
@@ -30,7 +30,7 @@
             </a>
           </li>
           <li>
-            <a href="questionanswer.html">
+            <a href="questionanswer.php">
               <img
                 src="https://img.icons8.com/?size=100&id=2908&format=png&color=000000"
                 alt="q&a"
@@ -56,27 +56,27 @@
               <input type="text" placeholder="Filter by user" />
             </div>
             <div class="tabs">
-              <button class="active">New users</button>
-              <button>Editors</button>
-              <button>Reputation</button>
+              <button class="active">Users</button>
+              <button>Admin</button>
+              <button>Posts</button>
             </div>
           </div>
         </div>
         <div class="users-grid">
           <!-- User cards will be populated by JavaScript -->
         </div>
-        <div class="pagination">
-          <a class="active">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">4</a>
-          <a href="#">5</a>
-          <span>...</span>
-          <a href="#">775187</a>
-          <a href="#">Next</a>
-        </div>
+
       </div>
     </main>
     <script type="module" src="./assets/js/users.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // If the users.js script already handles creating user cards,
+        // this function will ensure the correct avatar URLs are used
+        window.createAvatar = function(username) {
+          return `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=random`;
+        };
+      });
+    </script>
   </body>
 </html>

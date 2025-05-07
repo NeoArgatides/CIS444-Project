@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 </div>
                 <div class="question-content">
-                    <a href="question.html?id=${
+                    <a href="question.php?id=${
                       question.id
                     }" class="question-title">${question.title}</a>
                     <p class="question-excerpt">${question.content}</p>
