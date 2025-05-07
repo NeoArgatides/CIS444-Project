@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         return filteredUsers.sort((a, b) => b.joinedDate - a.joinedDate);
       case "admin":
         return filteredUsers.filter((user) => user.isAdmin);
-      case "posts":
+      case "most-posts":
         return filteredUsers.sort((a, b) => b.posts - a.posts);
       default:
         return filteredUsers;

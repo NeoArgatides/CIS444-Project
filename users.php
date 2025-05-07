@@ -58,7 +58,7 @@
             <div class="tabs">
               <button class="active">Users</button>
               <button>Admin</button>
-              <button>Posts</button>
+              <button>Most Posts</button>
             </div>
           </div>
         </div>
