@@ -7,24 +7,12 @@
     <link rel="stylesheet" href="./assets/css/styles.css" />
   </head>
   <body>
-    <header>
-      <a href="index.html">
-        <img src="./assets/img/logo-no-bg.png" alt="logo" />
-      </a>
-      <input type="text" name="search" placeholder="Search users" />
-      <div class="profile">
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
-          alt="profile"
-        />
-        <span>John Doe</span>
-      </div>
-    </header>
+    <?php include_once 'header.php'; ?>
     <main>
       <div class="sidebar">
         <ul>
           <li>
-            <a href="index.html">
+            <a href="index.php">
               <img
                 src="https://img.icons8.com/?size=100&id=67881&format=png&color=000000"
                 alt="home"
@@ -65,7 +53,7 @@
           </p>
 
           <div class="auth-buttons">
-            <a class="login-button" href="login.html">
+            <a class="login-button" href="login.php">
               <img
                 src="https://img.icons8.com/?size=100&id=61027&format=png"
                 alt="login"
@@ -75,7 +63,7 @@
             <div class="divider">
               <span>or</span>
             </div>
-            <a class="register-button" href="signup.html">
+            <a class="register-button" href="signup.php">
               <img
                 src="https://img.icons8.com/?size=100&id=43942&format=png"
                 alt="register"
@@ -94,6 +82,9 @@
         </div>
       </div>
     </main>
-    <script type="module" src="./assets/js/user.js"></script>
+    <script type="module">
+      import { setActive } from "./assets/js/navigation.js"
+      setActive()
+    </script>
   </body>
 </html>

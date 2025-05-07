@@ -7,24 +7,12 @@
     <link rel="stylesheet" href="./assets/css/question.css" />
   </head>
   <body>
-    <header>
-      <a href="index.html">
-        <img src="./assets/img/logo-no-bg.png" alt="logo" />
-      </a>
-      <input type="text" name="search" placeholder="Search questions" />
-      <div class="profile">
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
-          alt="profile"
-        />
-        <span>John Doe</span>
-      </div>
-    </header>
+    <?php include_once 'header.php'; ?>
     <main>
       <div class="sidebar">
         <ul>
           <li>
-            <a href="index.html">
+            <a href="index.php">
               <img
                 src="https://img.icons8.com/?size=100&id=67881&format=png&color=000000"
                 alt="home"

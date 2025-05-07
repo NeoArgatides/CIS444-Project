@@ -12,10 +12,10 @@
   padding: 40px;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .auth-container h1 {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   font-size: 32px;
   color: #242729;
   margin-bottom: 16px;

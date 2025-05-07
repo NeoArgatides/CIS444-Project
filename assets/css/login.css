@@ -27,14 +27,22 @@ body {
 .auth-container {
   max-width: 400px;
   margin: 2rem auto;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.auth-container div {
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   border: 1px solid #dee2e6;
   border-radius: 8px;
   padding: 2rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
 }
+
 .auth-container h2 {
   margin-bottom: 1rem;
 }
