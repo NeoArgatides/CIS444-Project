@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['username'] = $user['Username'];
                 $_SESSION['role'] = $user['Role'];
 
-                header("Location: /index.php");
+                header("Location: ../index.php");
                 exit();
             } else {
                 $errors[] = "Invalid password";
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $_SESSION['login_errors'] = $errors;
     $_SESSION['login_old'] = ['username' => $username];
-    header("Location: /login.php");
+    header("Location: ../login.php");
     exit();
 }
 ?>

@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt->execute()) {
             $_SESSION['message'] = "Registration successful! Please login.";
-            header("Location: /login.php");
+            header("Location: ../login.php");
             exit();
         } else {
             $errors[] = "Registration failed. Please try again.";
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $_SESSION['register_errors'] = $errors;
     $_SESSION['register_old'] = ['email' => $email, 'username' => $username];
-    header("Location: /signup.php");
+    header("Location: ../signup.php");
     exit();
 }
 ?>
