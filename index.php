@@ -131,6 +131,9 @@ if (empty($popular_tags)) {
               <span>Q&A</span>
             </a>
           </li>
+          <?php if ($is_logged_in && isset($_SESSION['role']) && $_SESSION['role'] === 'Admin'): ?>
+      <li><a href="admin.php"><img src="https://img.icons8.com/?size=100&id=12599&format=png&color=000000" alt="admin" /><span>Admin</span></a></li>
+      <?php endif; ?>
         </ul>
         <div class="links">
           <a href="#">Privacy Policy</a>

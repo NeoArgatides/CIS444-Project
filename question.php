@@ -2,6 +2,10 @@
 session_start();
 require_once 'php/config.php';
 
+// Check if user is logged in
+$logged_in = isset($_SESSION['user_id']);
+$current_user_id = $logged_in ? $_SESSION['user_id'] : 0;
+
 // Check if question ID is provided
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header("Location: questionanswer.php");
@@ -9,22 +13,8 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 }
 
 $question_id = intval($_GET['id']);
-$logged_in = isset($_SESSION['user_id']);
-$current_user_id = $logged_in ? $_SESSION['user_id'] : 0;
 
-// Function to calculate time ago
-function time_ago($datetime) {
-    $timestamp = strtotime($datetime);
-    $difference = time() - $timestamp;
-
-    if ($difference < 60) return "$difference second(s) ago";
-    elseif ($difference < 3600) return floor($difference / 60) . " minute(s) ago";
-    elseif ($difference < 86400) return floor($difference / 3600) . " hour(s) ago";
-    elseif ($difference < 604800) return floor($difference / 86400) . " day(s) ago";
-    else return date('F j, Y', $timestamp);
-}
-
-// Get question details
+// Get question details regardless of login status
 $stmt = $DBConnect->prepare("
     SELECT p.PostID, p.Title, p.Content, p.Timestamp, p.Tags, p.UserID,
            u.Username,
@@ -45,29 +35,44 @@ if ($question_result->num_rows === 0) {
 
 $question = $question_result->fetch_assoc();
 
-// Check if the current user has liked this post
+// Time ago function
+function time_ago($datetime) {
+    $timestamp = strtotime($datetime);
+    $difference = time() - $timestamp;
+
+    if ($difference < 60) return "$difference second(s) ago";
+    elseif ($difference < 3600) return floor($difference / 60) . " minute(s) ago";
+    elseif ($difference < 86400) return floor($difference / 3600) . " hour(s) ago";
+    elseif ($difference < 604800) return floor($difference / 86400) . " day(s) ago";
+    else return date('F j, Y', $timestamp);
+}
+
+// Get replies and other data only if user is logged in
 $user_liked = false;
+$replies = [];
+
 if ($logged_in) {
+    // Check if the current user has liked this post
     $like_check = $DBConnect->prepare("SELECT LikeID FROM Likes WHERE PostID = ? AND UserID = ?");
     $like_check->bind_param("ii", $question_id, $current_user_id);
     $like_check->execute();
     $user_liked = $like_check->get_result()->num_rows > 0;
-}
 
-// Get replies
-$reply_stmt = $DBConnect->prepare("
-    SELECT r.ReplyID, r.Content, r.Timestamp, r.UserID, u.Username
-    FROM Replies r
-    JOIN Users u ON r.UserID = u.UserID
-    WHERE r.PostID = ?
-    ORDER BY r.Timestamp ASC
-");
-$reply_stmt->bind_param("i", $question_id);
-$reply_stmt->execute();
-$replies_result = $reply_stmt->get_result();
-$replies = [];
-while ($reply = $replies_result->fetch_assoc()) {
-    $replies[] = $reply;
+    // Get replies
+    $reply_stmt = $DBConnect->prepare("
+        SELECT r.ReplyID, r.Content, r.Timestamp, r.UserID, u.Username
+        FROM Replies r
+        JOIN Users u ON r.UserID = u.UserID
+        WHERE r.PostID = ?
+        ORDER BY r.Timestamp ASC
+    ");
+    $reply_stmt->bind_param("i", $question_id);
+    $reply_stmt->execute();
+    $replies_result = $reply_stmt->get_result();
+
+    while ($reply = $replies_result->fetch_assoc()) {
+        $replies[] = $reply;
+    }
 }
 
 // Handle reply submission
@@ -94,8 +99,6 @@ if ($logged_in && isset($_POST['submit_reply']) && !empty($_POST['reply_content'
         $reply_error = "Failed to post your reply. Please try again.";
     }
 }
-
-// Increment view count (could be implemented with a separate table for more accurate tracking)
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -138,12 +141,45 @@ if ($logged_in && isset($_POST['submit_reply']) && !empty($_POST['reply_content'
               <span>Q&A</span>
             </a>
           </li>
+          <?php if ($logged_in && isset($_SESSION['role']) && $_SESSION['role'] === 'Admin'): ?>
+          <li><a href="admin.php"><img src="https://img.icons8.com/?size=100&id=12599&format=png&color=000000" alt="admin" /><span>Admin</span></a></li>
+          <?php endif; ?>
         </ul>
         <div class="links">
           <a href="#">Privacy Policy</a>
           <a href="#">User agreement</a>
         </div>
       </div>
+
+      <?php if (!$logged_in): ?>
+      <div class="main-content">
+        <div class="content">
+          <div class="question-header">
+            <h1><?= htmlspecialchars($question['Title']) ?></h1>
+            <div class="question-stats">
+              <span>Asked <?= time_ago($question['Timestamp']) ?></span>
+            </div>
+          </div>
+
+          <div class="auth-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; background-color: #f8f9fa; border-radius: 8px; margin-top: 20px; text-align: center;">
+            <h2>Please Log In to View Complete Questions and Answers</h2>
+            <p style="margin-bottom: 20px; color: #6a737c;">You need to be logged in to see replies, post answers, and interact with content.</p>
+
+            <div class="auth-buttons" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; width: 250px;">
+              <a class="login-button" href="login.php" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; background-color: #e1ecf4; color: #39739d; text-decoration: none; border-radius: 4px; font-weight: 500; border: 1px solid #39739d;">
+                <img src="https://img.icons8.com/?size=100&id=61027&format=png" alt="login" style="width: 24px; height: 24px;" />
+                Log in
+              </a>
+              <div class="divider" style="display: flex; align-items: center; margin: 10px 0;"><span style="background: #f8f9fa; padding: 0 10px; color: #6a737c;">or</span></div>
+              <a class="register-button" href="signup.php" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; background-color: #0a95ff; color: white; text-decoration: none; border-radius: 4px; font-weight: 500; border: none;">
+                <img src="https://img.icons8.com/?size=100&id=43942&format=png" alt="register" style="width: 24px; height: 24px;" />
+                Sign up
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <?php else: ?>
       <div class="main-content">
         <div class="content">
           <div class="question-header">
@@ -296,7 +332,6 @@ if ($logged_in && isset($_POST['submit_reply']) && !empty($_POST['reply_content'
             </div>
           <?php endif; ?>
 
-          <?php if ($logged_in): ?>
           <div class="your-answer">
             <h2>Your Answer</h2>
               <?php if (!empty($reply_error)): ?>
@@ -311,13 +346,10 @@ if ($logged_in && isset($_POST['submit_reply']) && !empty($_POST['reply_content'
                 <button type="submit" name="submit_reply" class="post-answer" id="post-answer-btn" disabled>Post Your Answer</button>
               </form>
             </div>
-          <?php else: ?>
-            <div class="login-prompt">
-              <p>You must <a href="login.php">log in</a> to answer this question.</p>
           </div>
-          <?php endif; ?>
         </div>
       </div>
+      <?php endif; ?>
     </main>
 
     <div id="toast-container"></div>

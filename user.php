@@ -2,6 +2,50 @@
 session_start();
 require_once 'php/config.php';
 
+// Check if user is logged in
+$is_logged_in = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+
+// If not logged in, show login message
+if (!$is_logged_in) {
+    // Still include header for consistency
+    include_once 'header.php';
+
+    echo '
+    <main>
+        <div class="sidebar">
+            <ul>
+                <li><a href="index.php"><img src="https://img.icons8.com/?size=100&id=67881&format=png&color=000000" alt="Ask" /><span>Ask</span></a></li>
+                <li><a href="users.php"><img src="https://img.icons8.com/?size=100&id=98957&format=png&color=000000" alt="users" /><span>Users</span></a></li>
+                <li><a href="questionanswer.php"><img src="https://img.icons8.com/?size=100&id=2908&format=png&color=000000" alt="q&a" /><span>Q&A</span></a></li>
+            </ul>
+            <div class="links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">User agreement</a>
+            </div>
+        </div>
+        <div class="page">
+            <div class="auth-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 70vh; text-align: center; padding: 20px;">
+                <h1>Please Log In</h1>
+                <p class="subtitle">You need to be logged in to view user profiles.</p>
+
+                <div class="auth-buttons" style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px; width: 250px;">
+                    <a class="login-button" href="login.php" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; background-color: #e1ecf4; color: #39739d; text-decoration: none; border-radius: 4px; font-weight: 500; border: 1px solid #39739d;">
+                        <img src="https://img.icons8.com/?size=100&id=61027&format=png" alt="login" style="width: 24px; height: 24px;" />
+                        Log in
+                    </a>
+                    <div class="divider" style="display: flex; align-items: center; margin: 10px 0;"><span style="background: #f8f9fa; padding: 0 10px; color: #6a737c;">or</span></div>
+                    <a class="register-button" href="signup.php" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; background-color: #0a95ff; color: white; text-decoration: none; border-radius: 4px; font-weight: 500; border: none;">
+                        <img src="https://img.icons8.com/?size=100&id=43942&format=png" alt="register" style="width: 24px; height: 24px;" />
+                        Sign up
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>';
+
+    exit();
+}
+
 function time_ago($datetime) {
 
   $timestamp = strtotime($datetime);
@@ -99,6 +143,9 @@ while ($post = $posts_result->fetch_assoc()) {
                 <li><a href="index.php"><img src="https://img.icons8.com/?size=100&id=67881&format=png&color=000000" alt="Ask" /><span>Ask</span></a></li>
                 <li><a href="users.php"><img src="https://img.icons8.com/?size=100&id=98957&format=png&color=000000" alt="users" /><span>Users</span></a></li>
                 <li><a href="questionanswer.php"><img src="https://img.icons8.com/?size=100&id=2908&format=png&color=000000" alt="q&a" /><span>Q&A</span></a></li>
+                <?php if ($is_logged_in && isset($_SESSION['role']) && $_SESSION['role'] === 'Admin'): ?>
+      <li><a href="admin.php"><img src="https://img.icons8.com/?size=100&id=12599&format=png&color=000000" alt="admin" /><span>Admin</span></a></li>
+      <?php endif; ?>
             </ul>
             <div class="links">
                 <a href="#">Privacy Policy</a>
