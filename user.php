@@ -46,6 +46,26 @@ if (!$is_logged_in) {
     exit();
 }
 
+// Handle profile updates
+if (isset($_POST['update_profile']) && isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $username = trim($_POST['username']);
+    $description = trim($_POST['description']);
+
+    // Basic validation
+    if (!empty($username)) {
+        // Update the user's profile
+        $update_stmt = $DBConnect->prepare("UPDATE Users SET Username = ?, Description = ? WHERE UserID = ?");
+        $update_stmt->bind_param("ssi", $username, $description, $user_id);
+
+        if ($update_stmt->execute()) {
+            // Redirect to avoid form resubmission
+            header("Location: user.php?id=" . $user_id . "&updated=1");
+            exit();
+        }
+    }
+}
+
 function time_ago($datetime) {
 
   $timestamp = strtotime($datetime);
@@ -154,10 +174,39 @@ while ($post = $posts_result->fetch_assoc()) {
         </div>
         <div class="page">
             <div class="user-profile">
+                <?php if (isset($_GET['updated']) && $_GET['updated'] == 1 && $is_own_profile): ?>
+                    <div class="alert alert-success">
+                        Your profile has been updated successfully.
+                    </div>
+                <?php endif; ?>
+
                 <div class="profile-header">
                     <img src="https://ui-avatars.com/api/?name=<?= urlencode($user['Username']) ?>&background=random" alt="avatar" class="avatar" />
                     <div class="profile-info">
-                        <h1><?= htmlspecialchars($user['Username']) ?></h1>
+                        <?php if ($is_own_profile): ?>
+                            <div class="edit-controls">
+                                <button id="edit-profile-btn" class="edit-btn">Edit Profile</button>
+                            </div>
+
+                            <!-- Username display (visible by default) -->
+                            <h1 id="username-display"><?= htmlspecialchars($user['Username']) ?></h1>
+
+                            <!-- Form for editing (hidden by default) -->
+                            <form id="profile-form" method="post" action="" style="display: none;">
+                                <div class="form-group">
+                                    <label for="username">Username:</label>
+                                    <input type="text" id="username" name="username" value="<?= htmlspecialchars($user['Username']) ?>" required>
+                                </div>
+
+                                <!-- Hidden description field that will be filled via JavaScript -->
+                                <input type="hidden" id="hidden-description" name="description" value="<?= htmlspecialchars($user['Description'] ?? '') ?>">
+                                <input type="hidden" name="update_profile" value="1">
+                            </form>
+                        <?php else: ?>
+                            <h1><?= htmlspecialchars($user['Username']) ?></h1>
+                        <?php endif; ?>
+
+                        <!-- These are now outside the form so they're always visible -->
                         <div class="member-info">
                             <span>Member since <?= $formatted_date_joined ?></span>
                             <span>Last seen: <?= time_ago($user['LastConnection']) ?></span>
@@ -176,14 +225,30 @@ while ($post = $posts_result->fetch_assoc()) {
                 </div>
 
                 <div class="about-section">
-                  <h2>About</h2>
-                  <p>
-                    <?= !empty($user['Description'])
-                        ? nl2br(htmlspecialchars($user['Description']))
-                        : "This user hasn't written a description yet." ?>
-                  </p>
+                    <h2>About</h2>
+                    <?php if ($is_own_profile): ?>
+                        <div id="description-display">
+                            <p>
+                                <?= !empty($user['Description'])
+                                    ? nl2br(htmlspecialchars($user['Description']))
+                                    : "This user hasn't written a description yet." ?>
+                            </p>
+                        </div>
+                        <div class="form-group" id="description-edit" style="display: none;">
+                            <textarea id="description-textarea" rows="5"><?= htmlspecialchars($user['Description'] ?? '') ?></textarea>
+                            <div class="form-actions">
+                                <button type="button" id="save-btn" class="save-btn">Save Changes</button>
+                                <button type="button" id="cancel-edit-btn" class="cancel-btn">Cancel</button>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <p>
+                            <?= !empty($user['Description'])
+                                ? nl2br(htmlspecialchars($user['Description']))
+                                : "This user hasn't written a description yet." ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
-
 
                 <div class="posts-section">
                     <div class="posts-header">
@@ -265,5 +330,119 @@ while ($post = $posts_result->fetch_assoc()) {
         </div>
     </main>
     <script type="module" src="./assets/js/user.js"></script>
+
+    <?php if ($is_own_profile): ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editBtn = document.getElementById('edit-profile-btn');
+        const cancelBtn = document.getElementById('cancel-edit-btn');
+        const profileForm = document.getElementById('profile-form');
+        const usernameDisplay = document.getElementById('username-display');
+        const descriptionDisplay = document.getElementById('description-display');
+        const descriptionEdit = document.getElementById('description-edit');
+
+        // Show edit form
+        editBtn.addEventListener('click', function() {
+            profileForm.style.display = 'block';
+            usernameDisplay.style.display = 'none';
+            descriptionDisplay.style.display = 'none';
+            descriptionEdit.style.display = 'block';
+            editBtn.style.display = 'none';
+        });
+
+        // Cancel edit
+        cancelBtn.addEventListener('click', function() {
+            profileForm.style.display = 'none';
+            usernameDisplay.style.display = 'block';
+            descriptionDisplay.style.display = 'block';
+            descriptionEdit.style.display = 'none';
+            editBtn.style.display = 'inline-block';
+        });
+
+        // Save changes
+        document.getElementById('save-btn').addEventListener('click', function() {
+            document.getElementById('hidden-description').value = document.getElementById('description-textarea').value;
+            document.getElementById('profile-form').submit();
+        });
+    });
+    </script>
+
+    <style>
+    .edit-controls {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 10px;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+    }
+
+    .edit-btn {
+        background-color: #0a95ff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input, .form-group textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .save-btn {
+        background-color: #2ecc71;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+    .cancel-btn {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .profile-header {
+        position: relative;
+    }
+    </style>
+    <?php endif; ?>
 </body>
 </html>

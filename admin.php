@@ -183,6 +183,19 @@ switch ($type) {
         }
         $query .= " ORDER BY l.Timestamp DESC";
         break;
+    case 'adminaction':
+        $query = "SELECT a.*, admin.Username as AdminUsername, target.Username as TargetUsername,
+                 p.Title as PostTitle FROM AdminActions a
+                 LEFT JOIN Users admin ON a.AdminID = admin.UserID
+                 LEFT JOIN Users target ON a.TargetUserID = target.UserID
+                 LEFT JOIN Posts p ON a.TargetPostID = p.PostID";
+        if (!empty($search)) {
+            $search = $DBConnect->real_escape_string($search);
+            $query .= " WHERE a.ActionType LIKE '%$search%' OR admin.Username LIKE '%$search%'
+                     OR target.Username LIKE '%$search%' OR a.Notes LIKE '%$search%'";
+        }
+        $query .= " ORDER BY a.Timestamp DESC";
+        break;
 }
 
 $result = $DBConnect->query($query);
@@ -429,6 +442,14 @@ $result = $DBConnect->query($query);
         .admin-table th:nth-child(3) { width: 30%; }
         .admin-table th:nth-child(4) { width: 20%; }
         .admin-table th:nth-child(5) { width: 15%; }
+        <?php elseif ($type === 'adminaction'): ?>
+        .admin-table th:nth-child(1) { width: 5%; }
+        .admin-table th:nth-child(2) { width: 15%; }
+        .admin-table th:nth-child(3) { width: 15%; }
+        .admin-table th:nth-child(4) { width: 10%; }
+        .admin-table th:nth-child(5) { width: 20%; }
+        .admin-table th:nth-child(6) { width: 15%; }
+        .admin-table th:nth-child(7) { width: 20%; }
         <?php endif; ?>
 
         /* Modal Styles */
@@ -517,7 +538,7 @@ $result = $DBConnect->query($query);
             <div class="admin-container">
                 <div class="admin-header">
                     <h1>Admin Panel</h1>
-                    <?php if ($type !== 'like'): ?>
+                    <?php if ($type !== 'adminaction'): ?>
                     <a href="admin_edit.php?type=<?= $type ?>&action=create" class="create-button">Create New <?= ucfirst($type) ?></a>
                     <?php endif; ?>
                 </div>
@@ -533,6 +554,7 @@ $result = $DBConnect->query($query);
                     <a href="admin.php?type=post" class="tab-button <?= $type === 'post' ? 'active' : '' ?>">Posts</a>
                     <a href="admin.php?type=reply" class="tab-button <?= $type === 'reply' ? 'active' : '' ?>">Replies</a>
                     <a href="admin.php?type=like" class="tab-button <?= $type === 'like' ? 'active' : '' ?>">Likes</a>
+                    <a href="admin.php?type=adminaction" class="tab-button <?= $type === 'adminaction' ? 'active' : '' ?>">Admin Actions</a>
                 </div>
 
                 <form method="GET" action="admin.php" class="search-bar">
@@ -668,6 +690,43 @@ $result = $DBConnect->query($query);
                                 <tr><td colspan="5">No likes found</td></tr>
                             <?php endif; ?>
                         </tbody>
+                        <?php elseif ($type === 'adminaction'): ?>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Admin</th>
+                                <th>Target User</th>
+                                <th>Action Type</th>
+                                <th>Target Item</th>
+                                <th>Date</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if ($result && $result->num_rows > 0): ?>
+                                <?php while ($row = $result->fetch_assoc()): ?>
+                                <tr>
+                                    <td><?= $row['ActionID'] ?></td>
+                                    <td><?= htmlspecialchars($row['AdminUsername']) ?></td>
+                                    <td><?= htmlspecialchars($row['TargetUsername']) ?></td>
+                                    <td><?= htmlspecialchars($row['ActionType']) ?></td>
+                                    <td>
+                                        <?php if (!empty($row['TargetPostID'])): ?>
+                                            Post: <?= htmlspecialchars($row['PostTitle']) ?>
+                                        <?php elseif (!empty($row['TargetReplyID'])): ?>
+                                            Reply ID: <?= $row['TargetReplyID'] ?>
+                                        <?php else: ?>
+                                            -
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?= date('Y-m-d H:i', strtotime($row['Timestamp'])) ?></td>
+                                    <td><?= htmlspecialchars($row['Notes']) ?></td>
+                                </tr>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr><td colspan="7">No admin actions found</td></tr>
+                            <?php endif; ?>
+                        </tbody>
                         <?php endif; ?>
                     </table>
                 </div>
@@ -690,7 +749,6 @@ $result = $DBConnect->query($query);
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('deleteModal');

@@ -18,7 +18,7 @@ $errors = [];
 $success = false;
 
 // Check if the type and action are valid
-if (!in_array($type, ['user', 'post', 'reply']) || !in_array($action, ['edit', 'create'])) {
+if (!in_array($type, ['user', 'post', 'reply', 'like']) || !in_array($action, ['edit', 'create'])) {
     header('Location: admin.php');
     exit();
 }
@@ -168,6 +168,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $query = "UPDATE Replies SET PostID = ?, UserID = ?, Content = ? WHERE ReplyID = ?";
                     $stmt = $DBConnect->prepare($query);
                     $stmt->bind_param("iisi", $post_id, $user_id, $content, $id);
+
+                    if ($stmt->execute()) {
+                        $success = true;
+                    } else {
+                        $errors[] = "Database error: " . $stmt->error;
+                    }
+                }
+            }
+            break;
+
+        case 'like':
+            $user_id = $_POST['user_id'] ?? '';
+            $post_id = $_POST['post_id'] ?? '';
+
+            // Validate input
+            if (empty($user_id)) $errors[] = "User ID is required";
+            if (empty($post_id)) $errors[] = "Post ID is required";
+
+            if (empty($errors)) {
+                if ($action === 'create') {
+                    $query = "INSERT INTO Likes (UserID, PostID, Timestamp) VALUES (?, ?, NOW())";
+                    $stmt = $DBConnect->prepare($query);
+                    $stmt->bind_param("ii", $user_id, $post_id);
+
+                    if ($stmt->execute()) {
+                        $success = true;
+                        $id = $DBConnect->insert_id;
+                    } else {
+                        $errors[] = "Database error: " . $stmt->error;
+                    }
+                } else {
+                    $query = "UPDATE Likes SET UserID = ?, PostID = ? WHERE LikeID = ?";
+                    $stmt = $DBConnect->prepare($query);
+                    $stmt->bind_param("iii", $user_id, $post_id, $id);
 
                     if ($stmt->execute()) {
                         $success = true;
@@ -508,6 +542,30 @@ $form_title = ucfirst($action) . ' ' . ucfirst($type);
                         <div class="form-group">
                             <label for="content">Content</label>
                             <textarea id="content" name="content" required><?= htmlspecialchars($item['Content'] ?? '') ?></textarea>
+                        </div>
+                    <?php elseif ($type === 'like'): ?>
+                        <div class="form-group">
+                            <label for="user_id">User</label>
+                            <select id="user_id" name="user_id" required>
+                                <option value="">Select User</option>
+                                <?php foreach ($users as $uid => $uname): ?>
+                                    <option value="<?= $uid ?>" <?= (isset($item['UserID']) && $item['UserID'] == $uid) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($uname) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="post_id">Post</label>
+                            <select id="post_id" name="post_id" required>
+                                <option value="">Select Post</option>
+                                <?php foreach ($posts as $pid => $ptitle): ?>
+                                    <option value="<?= $pid ?>" <?= (isset($item['PostID']) && $item['PostID'] == $pid) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($ptitle) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                     <?php endif; ?>
 

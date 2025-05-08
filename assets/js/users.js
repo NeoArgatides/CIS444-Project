@@ -25,13 +25,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       users = data.map((user) => ({
         id: user.UserID,
         name: user.Username,
-        location: "Unknown", // or user.Location if exists
         avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(
           user.Username
         )}&background=random`,
         joinedDate: new Date(user.DateJoined),
         isAdmin: user.Role === "Admin",
-        reputation: Math.floor(Math.random() * 1000),
         posts: user.PostCount,
       }));
 
@@ -84,7 +82,9 @@ document.addEventListener("DOMContentLoaded", async function () {
           <img src="${user.avatar}" alt="${user.name}" />
           <div class="user-info">
             <h3>${user.name}</h3>
-            <div class="location">${user.location}</div>
+            <div class="location">Joined: ${new Date(
+              user.joinedDate
+            ).toLocaleDateString()}</div>
             <div class="score">
               ${`Posts: ${user.posts}`}
             </div>
